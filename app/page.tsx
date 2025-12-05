@@ -7,7 +7,9 @@ import { Song } from "./Song";
 
 export default function Home() {
   const [songs, setSongs] = useState<Song[]>([])
+  const [searchedSongs, setSearchedSongs] = useState<Song[]>([])
   const [error, setError] = useState(false)
+  let initSongSent = false
   
   async function onClick(){
     const moodEl = document.getElementById("mood") as any
@@ -42,6 +44,14 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 my-auto justify-center items-center font-sans dark:bg-black">
+      <div className="flex flex-col mb-13">
+        <p>What song would you like recommended songs to sound like?</p>
+        <input id = "songInput"></input>
+        <button></button>
+        <div>
+
+        </div>
+      </div>
       <div className="flex w-full items-center justify-center">
         <label className = "mr-2" htmlFor = "mood">Sad / Less Energetic</label>
         <input className = "my-2" type="range" id="mood" name="mood" min="0" max="100" defaultValue="50" step="1" />
