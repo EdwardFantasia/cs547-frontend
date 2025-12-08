@@ -1,14 +1,10 @@
 import { Song } from "./Song"
 
-export default function SongComp(songData: Song){
-    function songCompClick(){
-        //TODO: go to spotify page for song OR yt search song if spotify API is being annoying
-    }
-
+export default function SongComp({selected, songData, songCompClick, cName}: {songData: Song, songCompClick: () => void, cName: string, selected: boolean}){
     return (
-        <div className = "flex flex-col justify-center items-center mx-auto outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2" onClick = {() => songCompClick()}>
-            <p>Song Title: {songData.name}</p>
-            <p>Artist: {songData.artist}</p>
+        <div id = {songData["track_id"]} className = {`${cName} ${selected ? "selected" : ""} flex flex-col justify-center items-center mx-auto outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2`} onClick = {() => songCompClick()}>
+            <p>Song Title: {songData.track_name}</p>
+            <p>Artist: {songData.artist_name}</p>
         </div>
     )
 }

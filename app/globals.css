@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.searchable.selected{
+  color: black;
+  background-color: white;
+}
+
+.playable.selected{
+  color: black;
+  background-color: white;
+}

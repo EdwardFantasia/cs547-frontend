@@ -1,5 +1,5 @@
 export interface Song{
-    name: String,
-    id: String,
-    artist: String
+    track_name: string,
+    track_id: string,
+    artist_name: string
 }
