@@ -34,3 +34,7 @@ body {
   color: black;
   background-color: white;
 }
+
+div#app-container{
+  width: 50%;
+}
