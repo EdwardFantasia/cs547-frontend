@@ -4,6 +4,25 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react';
 import SongComp from "./SongComp";
 import { Song } from "./Song";
+import Script from "next/script";
+
+interface SpotifyIFrameAPI {
+    createController(
+        element: HTMLElement | null,
+        options: {
+            uri: string;
+            width: string | number;
+            height: string | number;
+        },
+        callback: (EmbedController: any) => void
+    ): void;
+}
+
+declare global {
+    interface Window {
+        onSpotifyIframeApiReady: (IFrameAPI: SpotifyIFrameAPI) => void;
+    }
+}
 
 export default function Home() {
   const [songs, setSongs] = useState<Song[]>([])
@@ -13,6 +32,7 @@ export default function Home() {
   const [songChosen, setSongChosen] = useState(false)
   const [chosenSong, setChosenSong] = useState<string>("")
   const [playingSong, setPlayingSong] = useState<string>("")
+  let spotifyController = null
 
   useEffect(() => {
     const fetchSearchableSongs = async () => {
@@ -37,6 +57,23 @@ export default function Home() {
     };
 
     fetchSearchableSongs();
+
+    // This function is defined ONCE in your main component/script
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+        const element = document.getElementById('spotify-embed-iframe');
+        const options = {
+            width: '100%',
+            height: 300,
+            uri: 'spotify:track:5SuOikwiRyPMVoIQDJUgSV', 
+        };
+
+        // Create the controller ONCE
+        IFrameAPI.createController(element, options, (EmbedController) => {
+            // Store the controller instance globally or in component state/ref
+            spotifyController = EmbedController; 
+            console.log("Spotify Embed Controller is Ready.");
+        });
+    };
   }, [])
 
   function filterSearchable(){
@@ -110,12 +147,15 @@ export default function Home() {
   function onPlayableClick(songData: Song){
     console.log("playable")
     setPlayingSong(songData["track_id"])
+    
+
   }
 
   async function onLikeOrSkip(evt: React.MouseEvent<HTMLButtonElement>){
-    console.log(evt)
     const clickedElement = evt.target as HTMLButtonElement;
+    console.log(clickedElement)
     let elId: string = clickedElement.id
+    console.log(elId)
     try{
         const response = await fetch("http://localhost:5000/feedback", {
         method: "POST",
@@ -124,7 +164,8 @@ export default function Home() {
           },
           body: JSON.stringify(
             {
-              likeOrSkip: elId
+              likeOrSkip: elId,
+              trackIndex: playingSong
             })
         });
         if(!response.ok){
@@ -133,7 +174,7 @@ export default function Home() {
         //setError(false)
         const respJson = await response.json()
         console.log(respJson)
-        setSongs(respJson)
+        setSongs(respJson["recommendations"])
     }
     catch (error){
       console.log(error)
@@ -145,6 +186,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 my-auto justify-center items-center font-sans dark:bg-black">
+      <Script src="https://open.spotify.com/embed/iframe-api/v1" async></Script>
+      <div id = "spotify-embed-iframe"></div>
       {fullSearchableSongs.length != 0 &&
       <div id = "app-container">
         {songChosen == false &&
@@ -185,8 +228,8 @@ export default function Home() {
           </div>
           {playingSong !== "" &&
             <div className = "flex flex-row justify-center items-center">
-              <button onClick = {(e) => onLikeOrSkip(e)} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2 mx-3" id = "like">Like</button>
-              <button className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2" id = "skip">Skip</button>
+              <button onClick = {onLikeOrSkip} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2 mx-3" id = "like">Like</button>
+              <button onClick = {onLikeOrSkip} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2" id = "skip">Skip</button>
             </div>
           }
         </div>
