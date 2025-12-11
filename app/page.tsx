@@ -169,8 +169,8 @@ export default function Home() {
           },
           body: JSON.stringify(
             {
-              likeOrSkip: elId,
-              trackIndex: playingSong
+              liked: elId,
+              song: playingSong
             })
         });
         if(!response.ok){
@@ -265,7 +265,7 @@ export default function Home() {
           </div>
           {playingSong !== "" &&
             <div className = "flex flex-row justify-center items-center">
-              <button onClick = {onLikeOrSkip} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2 mx-3" id = "like">Like</button>
+              <button onClick = {onLikeOrSkip} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2 mx-3" id = "full">Like</button>
               <button onClick = {onLikeOrSkip} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer my-2" id = "skip">Skip</button>
             </div>
           }
