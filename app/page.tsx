@@ -106,7 +106,7 @@ export default function Home() {
           //setError(false)
           const respJson = await response.json()
           console.log(respJson)
-          setSongs(respJson["recommendations"])
+          setSongs(respJson)
       }
       else{
         console.log("moodVal: ", moodVal)
@@ -130,7 +130,7 @@ export default function Home() {
             //setError(false)
             const respJson = await response.json()
             console.log(respJson)
-            setSongs(respJson["recommendations"])
+            setSongs(respJson)
         }
         setSongChosen(true)
       }
