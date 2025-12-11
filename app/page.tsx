@@ -161,7 +161,7 @@ export default function Home() {
     let elId: string = clickedElement.id
     console.log(elId)
     try{
-        const response = await fetch(`${serverAddress}/feedback`, {
+        const response = await fetch(`${serverAddress}/likeOrSkip`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
