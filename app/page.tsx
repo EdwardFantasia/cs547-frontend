@@ -220,7 +220,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 my-auto justify-center items-center font-sans dark:bg-black">
-      <Link href={"https://github.com/seungho715/CS-547-Final"}></Link>
+      <Link href={"https://github.com/seungho715/CS-547-Final"}>GitHub Page</Link>
       <p>Ensure the address to your server is correct:</p>
       <input placeholder = {serverAddress} className="outline-2 outline-offset-2 outline-solid outline-white rounded-sm my-2" id = "serverReference"></input>
       <button onClick = {() => onSaveAddressClick()} className = "outline-2 outline-offset-2 outline-solid outline-white rounded-sm cursor-pointer" id = "saveAddress">Save Address</button>
